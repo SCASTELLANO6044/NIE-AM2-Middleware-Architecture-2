@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Task 7</title>
+    </head>
+    <body>
+        <div id="log"></div>
+    </body>
+    <script>
+        // Declare an EventSource
+        const eventSource = new EventSource('http://localhost:8080');
+
+        eventSource.addEventListener('message', (e) => {
+            var node = document.createElement("p");
+            var textnode = document.createTextNode(e.data);
+            node.appendChild(textnode);
+            document.getElementById("log").appendChild(node);
+            console.log(e.data);
+        });
+    </script>
+</html>

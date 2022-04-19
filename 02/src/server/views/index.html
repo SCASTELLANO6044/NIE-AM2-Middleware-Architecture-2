@@ -1,0 +1,84 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Homework02</title>
+    </head>
+    <body>
+        <!--
+            Title of the homework,
+            Label that displays the status of the download,
+            Button which triggers the javascript function,
+            Textfiel which captures the website we want to download a file.
+        -->
+        <h1>Homework02</h1>
+        <h2 id="status">Status</h2>
+        <button onclick="onClick()">Download</button>
+        <input id="link" type="text" placeholder="Please introduce a link to download"
+            oninput="onInput(this.value)">
+    </body>
+    <script>
+        let file;
+        const xhr = new XMLHttpRequest();
+        xhr.responseType = 'blob';
+
+        /*
+            This function captures the link on which we wan to start the download.
+        */
+        function onInput(value){
+            document.getElementById("link").setAttribute("value", value);
+        }
+
+        /*
+            Function triggered once the button is pressed.
+        */
+        function onClick() {
+
+            /*
+                The variables link and statusLabel store the link of the website we want 
+                to download a file and the text displayed in the h2 label.
+            */
+            const link = document.getElementById("link").getAttribute("value");
+            const statusLabel = document.getElementById("status");
+
+            
+            /*
+                First thing we do once the button is triggered change the content of the 
+                label to "Loading" and print that status on console too.
+            */
+            xhr.open("GET", link, true);
+            console.log('Loading');
+            statusLabel.innerHTML = "Loading";
+
+            /*
+                Once we have execute the "xhr.send" line we change the content of the 
+                label to "Loaded" and print that status on console too and start with
+                the process of download.
+            */
+            xhr.send();
+            console.log('Loaded');
+            statusLabel.innerHTML = "Loaded";
+
+            /*
+                Once the download is in progress we change the content of the 
+                label to "Downloading" and print that status on console too
+            */
+            xhr.onprogress = () => {
+                console.log('Downloading');
+                statusLabel.innerHTML = "Downloading";
+            }
+
+            /*
+                Finally, when the download is finnished we change the content of the 
+                label to "Link Downloaded" and print that status on console too and create
+                an object with the response.
+            */
+            xhr.onload = () => {
+                console.log('Downloaded');
+                statusLabel.innerText = "Link Downloaded";
+                file = URL.createObjectURL(xhr.response);
+                statusLabel.setAttribute('href', file);
+            }
+        }
+    </script>
+</html>
